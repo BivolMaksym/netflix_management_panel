@@ -1,0 +1,54 @@
+# DB_PROCS_TRIGGERS_SUMMARY
+
+## Procedures (what they do, inputs/outputs, guarantees)
+- sp_add_subtitle(...) - Inserts subtitle cue.
+- sp_add_to_watchlist(...) - Upsert into watchlist.
+- sp_apply_referral_discount(...) - Transactional, validates active subs for inviter/invitee, sets discount.
+- sp_cancel_subscription(...) - Transactional cancel, sets status=cancelled, end_date.
+- sp_change_subscription_quality(...) - Transactional change quality.
+- sp_create_account(...) - Inserts new account.
+- sp_create_profile(...) - Inserts new profile, trigger ensures max 4.
+- sp_create_subscription(...) - Transactional create sub, always sets end_date=+30 days, trial_ends_at if trial_days>0.
+- sp_delete_account(...) - Transactional cascade-like delete.
+- sp_delete_media(...) - Deletes media row.
+- sp_delete_profile(...) - Deletes profile row.
+- sp_delete_subtitles_for_media(...) - Deletes subtitles.
+- sp_get_* procedures - Return data from views.
+- sp_mgmt_check_credentials(...) - Validates management account login.
+- sp_mgmt_create_account(...) - Creates management account.
+- sp_mgmt_disable_account(...) - Toggle is_active.
+- sp_mgmt_get_account_for_login(...) - Returns mgmt account.
+- sp_mgmt_record_login_attempt(...) - Tracks mgmt login attempts.
+- sp_record_login_attempt(...) - Tracks user login attempts.
+- sp_record_view(...) - Upserts viewing_history.
+- sp_remove_from_watchlist(...) - Removes from watchlist.
+- sp_set_preferences(...) - Upserts preferences.
+- sp_update_account(...) - Transactional update email/password.
+- sp_update_profile(...) - Updates profile fields.
+- sp_upsert_media(...) - Transactional insert/update media with validation.
+
+## Triggers
+- profiles.trg_profiles_max4 BEFORE INSERT - Enforces max 4 profiles.
+- subscriptions.trg_subscriptions_one_active BEFORE INSERT - Ensures only one active subscription.
+- viewing_history.trg_vh_clamp_resume BEFORE INSERT/UPDATE - Clamps resume position.
+- viewing_history.trg_viewing_history_inc_views AFTER INSERT - Increments media views.
+
+## Views
+- v_account_profiles - Accounts joined to profiles.
+- v_active_subscriptions - Active subscriptions only.
+- v_management_accounts - Public-safe mgmt accounts.
+- v_media_catalog - Media listing with description.
+- v_preferences_anon - Anonymized preferences.
+- v_watch_stats - Aggregated viewing stats.
+
+## Transactions used in
+- sp_create_subscription, sp_cancel_subscription, sp_change_subscription_quality
+- sp_delete_account, sp_update_account
+- sp_apply_referral_discount
+- sp_upsert_media
+
+## Other notes
+- subscriptions.price is a generated stored column by quality.
+- Signals used for validation errors.
+
+(See detailed conversation for full descriptions.)
