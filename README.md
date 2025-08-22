@@ -151,6 +151,7 @@ Login first, then copy JWT token and change JWT Token variable for collection to
 * Age rating must be a number; release date required.
 * Genres are selected from predefined options.
 * Quality is checked when creating/updating media.
+* You can find additional information regardgin triggers/stored procedures/ usage of transcation in document # DB_PROCS_TRIGGERS_SUMMARY
 
 ---
 
